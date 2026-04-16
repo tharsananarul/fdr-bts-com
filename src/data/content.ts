@@ -709,7 +709,7 @@ export const SUBJECTS: Subject[] = [
                 {
                   title: "Quand l'utiliser ?",
                   color: 'blue',
-                  text: 'Pour répondre à toute question de droit (Mission 1.3, 2.3 ou 3.3 du cas Gemdoubs par exemple). C\'est la structure qui garantit le maximum de points.'
+                  text: 'Pour répondre de manière structurée à toute question juridique (mission de droit). C\'est la méthode qui garantit d\'obtenir le maximum de points.'
                 },
                 {
                   title: "Les 5 étapes clés",
