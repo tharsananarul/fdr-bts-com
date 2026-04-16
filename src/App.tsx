@@ -14,8 +14,10 @@ import {
 } from 'lucide-react';
 import { cn } from './lib/utils';
 import { SUBJECTS, CEJM_CHAPTERS, Subject, Section, ChapterContent } from './data/content';
+import Home from './components/Home';
 
 export default function App() {
+  const [isHome, setIsHome] = useState(true);
   const [activeSubject, setActiveSubject] = useState<Subject>(SUBJECTS[0]);
   const [activeSection, setActiveSection] = useState<Section>(SUBJECTS[0].sections[0]);
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -35,12 +37,14 @@ export default function App() {
     const syncStateFromHash = () => {
       const hash = window.location.hash.replace('#', '');
       if (!hash) {
+        setIsHome(true);
         setActiveSubject(SUBJECTS[0]);
         setActiveSection(SUBJECTS[0].sections[0]);
         setActiveCejmChapter(null);
         return;
       }
 
+      setIsHome(false);
       const parts = hash.split('/');
       const subjId = parts[0];
       const sectId = parts[1];
@@ -464,6 +468,13 @@ export default function App() {
     }
   };
 
+  const navigateFromHome = (subjectId: string) => {
+    const subj = SUBJECTS.find(s => s.id === subjectId);
+    if (subj) {
+      window.location.hash = `#${subj.id}/${subj.sections[0].id}`;
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-bg-page selection:bg-accent selection:text-black">
       {/* Header */}
@@ -552,103 +563,108 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      {/* Main Content — Full width, single column SPA */}
-      <main className="flex-1 w-full max-w-5xl mx-auto px-4 md:px-10 py-6 md:py-10">
-        {/* Subject Header */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeSubject.id}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0 }}
-            className="mb-8 md:mb-12"
-          >
-            <p className="text-[10px] md:text-xs font-bold text-muted uppercase tracking-widest mb-2">{activeSubject.tag}</p>
-            <h1 className="text-3xl md:text-6xl lg:text-7xl font-black leading-[0.9] tracking-[-2px] md:tracking-[-3px] mb-4 md:mb-6">
-              {activeSubject.title}
-            </h1>
-            <p className="text-muted text-xs md:text-base max-w-xl font-medium">{activeSubject.description}</p>
-          </motion.div>
-        </AnimatePresence>
-
-        {/* Section Tabs */}
-        <div className="flex bg-border-theme gap-[1px] mb-8 overflow-x-auto no-scrollbar">
-          {activeSubject.sections.map((section) => (
-            <button
-              key={section.id}
-              onClick={() => handleSectionChange(section)}
-              className={cn(
-                "flex-1 min-w-[90px] md:min-w-[120px] p-3 md:p-4 text-[9px] md:text-[11px] uppercase font-bold tracking-wider transition-all whitespace-nowrap",
-                activeSection.id === section.id
-                  ? "bg-bg-card text-accent"
-                  : "bg-bg-page text-muted hover:text-white"
-              )}
+      {isHome ? (
+        <main className="flex-1 w-full max-w-5xl mx-auto py-6 md:py-10 flex flex-col">
+          <Home onNavigate={navigateFromHome} />
+        </main>
+      ) : (
+        <main className="flex-1 w-full max-w-5xl mx-auto px-4 md:px-10 py-6 md:py-10">
+          {/* Subject Header */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeSubject.id}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0 }}
+              className="mb-8 md:mb-12"
             >
-              {section.title}
-            </button>
-          ))}
-        </div>
+              <p className="text-[10px] md:text-xs font-bold text-muted uppercase tracking-widest mb-2">{activeSubject.tag}</p>
+              <h1 className="text-3xl md:text-6xl lg:text-7xl font-black leading-[0.9] tracking-[-2px] md:tracking-[-3px] mb-4 md:mb-6">
+                {activeSubject.title}
+              </h1>
+              <p className="text-muted text-xs md:text-base max-w-xl font-medium">{activeSubject.description}</p>
+            </motion.div>
+          </AnimatePresence>
 
-        {/* Content Area */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={`${activeSection.id}-${activeCejmChapter?.id || 'none'}`}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-            className="space-y-6 flex-1"
-          >
-            <div className="bg-bg-card p-5 md:p-10 border border-border-theme">
-              {/* Section Title */}
-              {!activeCejmChapter && (
-                <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
-                  <h3 className="text-xl md:text-3xl font-black tracking-tighter flex items-center gap-3 md:gap-4">
-                    {activeSection.title}
-                    {activeSection.badge && (
-                      <span className={cn(
-                        "text-[9px] md:text-[10px] px-2 md:px-3 py-1 rounded-full font-black uppercase tracking-widest",
-                        activeSection.badgeColor === 'blue' && "bg-blue-500 text-white",
-                        activeSection.badgeColor === 'purple' && "bg-purple-500 text-white",
-                        activeSection.badgeColor === 'green' && "bg-emerald-500 text-white",
-                        activeSection.badgeColor === 'amber' && "bg-amber-500 text-black",
-                        activeSection.badgeColor === 'teal' && "bg-teal-500 text-white",
-                      )}>
-                        {activeSection.badge}
-                      </span>
-                    )}
-                  </h3>
+          {/* Section Tabs */}
+          <div className="flex bg-border-theme gap-[1px] mb-8 overflow-x-auto no-scrollbar">
+            {activeSubject.sections.map((section) => (
+              <button
+                key={section.id}
+                onClick={() => handleSectionChange(section)}
+                className={cn(
+                  "flex-1 min-w-[90px] md:min-w-[120px] p-3 md:p-4 text-[9px] md:text-[11px] uppercase font-bold tracking-wider transition-all whitespace-nowrap",
+                  activeSection.id === section.id
+                    ? "bg-bg-card text-accent"
+                    : "bg-bg-page text-muted hover:text-white"
+                )}
+              >
+                {section.title}
+              </button>
+            ))}
+          </div>
+
+          {/* Content Area */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={`${activeSection.id}-${activeCejmChapter?.id || 'none'}`}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+              className="space-y-6 flex-1"
+            >
+              <div className="bg-bg-card p-5 md:p-10 border border-border-theme">
+                {/* Section Title */}
+                {!activeCejmChapter && (
+                  <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
+                    <h3 className="text-xl md:text-3xl font-black tracking-tighter flex items-center gap-3 md:gap-4">
+                      {activeSection.title}
+                      {activeSection.badge && (
+                        <span className={cn(
+                          "text-[9px] md:text-[10px] px-2 md:px-3 py-1 rounded-full font-black uppercase tracking-widest",
+                          activeSection.badgeColor === 'blue' && "bg-blue-500 text-white",
+                          activeSection.badgeColor === 'purple' && "bg-purple-500 text-white",
+                          activeSection.badgeColor === 'green' && "bg-emerald-500 text-white",
+                          activeSection.badgeColor === 'amber' && "bg-amber-500 text-black",
+                          activeSection.badgeColor === 'teal' && "bg-teal-500 text-white",
+                        )}>
+                          {activeSection.badge}
+                        </span>
+                      )}
+                    </h3>
+                  </div>
+                )}
+
+                {/* Dynamic Content */}
+                <div className="space-y-8 md:space-y-10">
+                  {renderContent(activeSection.content)}
+                </div>
+              </div>
+
+              {/* Tips & Warnings — only show for non-construction/non-chapter content in bloc1 */}
+              {activeSubject.id === 'bloc1' && activeSection.content.type !== 'construction' && activeSection.content.type !== 'cejm-chapters' && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="p-5 md:p-6 bg-bg-card border border-border-theme flex gap-4">
+                    <CheckCircle2 className="text-accent flex-shrink-0" size={18} />
+                    <div>
+                      <h5 className="text-[9px] md:text-[10px] font-black text-accent uppercase tracking-widest mb-2">Conseil Expert</h5>
+                      <p className="text-[11px] md:text-xs text-muted font-medium">Justifie toujours tes choix par rapport aux cibles pour gagner des points.</p>
+                    </div>
+                  </div>
+                  <div className="p-5 md:p-6 bg-bg-card border border-border-theme flex gap-4">
+                    <AlertCircle className="text-rose-500 flex-shrink-0" size={18} />
+                    <div>
+                      <h5 className="text-[9px] md:text-[10px] font-black text-rose-500 uppercase tracking-widest mb-2">Piège à éviter</h5>
+                      <p className="text-[11px] md:text-xs text-muted font-medium">Ne confonds pas objectif affectif (image) et conatif (action).</p>
+                    </div>
+                  </div>
                 </div>
               )}
-
-              {/* Dynamic Content */}
-              <div className="space-y-8 md:space-y-10">
-                {renderContent(activeSection.content)}
-              </div>
-            </div>
-
-            {/* Tips & Warnings — only show for non-construction/non-chapter content in bloc1 */}
-            {activeSubject.id === 'bloc1' && activeSection.content.type !== 'construction' && activeSection.content.type !== 'cejm-chapters' && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="p-5 md:p-6 bg-bg-card border border-border-theme flex gap-4">
-                  <CheckCircle2 className="text-accent flex-shrink-0" size={18} />
-                  <div>
-                    <h5 className="text-[9px] md:text-[10px] font-black text-accent uppercase tracking-widest mb-2">Conseil Expert</h5>
-                    <p className="text-[11px] md:text-xs text-muted font-medium">Justifie toujours tes choix par rapport aux cibles pour gagner des points.</p>
-                  </div>
-                </div>
-                <div className="p-5 md:p-6 bg-bg-card border border-border-theme flex gap-4">
-                  <AlertCircle className="text-rose-500 flex-shrink-0" size={18} />
-                  <div>
-                    <h5 className="text-[9px] md:text-[10px] font-black text-rose-500 uppercase tracking-widest mb-2">Piège à éviter</h5>
-                    <p className="text-[11px] md:text-xs text-muted font-medium">Ne confonds pas objectif affectif (image) et conatif (action).</p>
-                  </div>
-                </div>
-              </div>
-            )}
-          </motion.div>
-        </AnimatePresence>
-      </main>
+            </motion.div>
+          </AnimatePresence>
+        </main>
+      )}
 
 
 
