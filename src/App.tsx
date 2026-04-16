@@ -620,7 +620,7 @@ export default function App() {
       </AnimatePresence>
 
       {isHome ? (
-        <main className="flex-1 w-full max-w-5xl mx-auto py-6 md:py-10 flex flex-col">
+        <main className="flex-1 w-full max-w-5xl mx-auto flex flex-col">
           <Home onNavigate={navigateFromHome} />
         </main>
       ) : (

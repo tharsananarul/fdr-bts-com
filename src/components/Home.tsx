@@ -17,7 +17,7 @@ export default function Home({ onNavigate }: HomeProps) {
   ];
 
   return (
-    <div className="flex-1 bg-[#050505] text-white font-sans flex flex-col pt-8 pb-10 px-4">
+    <div className="flex-1 bg-[#050505] text-white font-sans flex flex-col pb-10 px-4">
       
       {/* Container Principal: centré et format mobile */}
       <div className="w-full max-w-md mx-auto flex flex-col flex-1">
