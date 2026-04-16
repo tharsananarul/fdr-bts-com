@@ -42,7 +42,7 @@ export default function Home({ onNavigate }: HomeProps) {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="text-center mt-10 mb-8"
+          className="text-center -mt-8 mb-8 relative z-10"
         >
           <h1 className="text-4xl font-black tracking-tighter mb-4 text-white">
             Bienvenue !
