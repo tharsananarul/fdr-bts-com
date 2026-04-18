@@ -7,8 +7,8 @@ export default defineConfig(({mode}) => {
   const env = loadEnv(mode, '.', '');
   return {
     // For GitHub Pages: set base to repo name in production
-    // Change 'bts-com-fdr' to your actual GitHub repo name if different
-    base: mode === 'production' ? '/bts-com-fdr/' : '/',
+    // Change 'fdr-bts-com' to your actual GitHub repo name if different
+    base: mode === 'production' ? '/fdr-bts-com/' : '/',
     plugins: [react(), tailwindcss()],
     define: {
       'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
