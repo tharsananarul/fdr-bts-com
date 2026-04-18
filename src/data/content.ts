@@ -392,7 +392,7 @@ export const SUBJECTS: Subject[] = [
         badgeColor: 'blue',
         content: {
           type: 'construction',
-          text: '(Contenu restreint à la demande de l\'enseignante)'
+          text: 'Contenu en cours de construction — Bientôt disponible.'
         }
       },
       {
@@ -402,7 +402,7 @@ export const SUBJECTS: Subject[] = [
         badgeColor: 'amber',
         content: {
           type: 'construction',
-          text: '(Contenu restreint à la demande de l\'enseignante)'
+          text: 'Contenu en cours de construction — Bientôt disponible.'
         }
       },
       {
@@ -411,25 +411,14 @@ export const SUBJECTS: Subject[] = [
         badge: 'Séance 3',
         badgeColor: 'purple',
         content: {
-          type: 'subsections',
-          subsections: [
+          type: 'list',
+          items: [
             {
-              id: 'plan-exces',
-              title: "Plan de la séance",
-              type: 'list',
-              items: [
-                {
-                  title: "1. L'excès et la modération",
-                  text: ["(Contenu restreint à la demande de l'enseignante)"]
-                },
-                {
-                  title: "2. L'excès et la parodie",
-                  text: ["(Contenu restreint à la demande de l'enseignante)"]
-                },
-                {
-                  title: "3. Une esthétique de l'excès ?",
-                  text: ["(Contenu restreint à la demande de l'enseignante)"]
-                }
+              title: "Grands axes de la séance :",
+              text: [
+                "1. L'excès et la modération",
+                "2. L'excès et la parodie",
+                "3. Une esthétique de l'excès ?"
               ]
             }
           ]
