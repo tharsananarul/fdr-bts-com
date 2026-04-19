@@ -411,17 +411,8 @@ export const SUBJECTS: Subject[] = [
         badge: 'Séance 3',
         badgeColor: 'purple',
         content: {
-          type: 'list',
-          items: [
-            {
-              title: "Grands axes de la séance :",
-              text: [
-                "1. L'excès et la modération",
-                "2. L'excès et la parodie",
-                "3. Une esthétique de l'excès ?"
-              ]
-            }
-          ]
+          type: 'construction',
+          text: 'Contenu en cours de construction — Bientôt disponible.'
         }
       }
     ]
